@@ -96,6 +96,8 @@ class sieve():
                 z0 = np.linspace(-1,1,n[j])
             elif tp=='c': 
                 z0 =-np.cos((np.linspace(1,n[j],n[j])-0.5)*np.pi/n[j])   # nodes on [-1,1]
+            elif tp=='ce': # Expanded chebyshev 
+                z0 =1/np.cos(np.pi/(2*n[j]))*np.cos(((2*np.linspace(1,n[j],n[j])-1)/2)*np.pi/n[j])   # nodes on [-1,1]
             elif tp=='rand': 
                 z0 = 2*np.sort(np.random.random(n[j]))-1                 # nodes on [-1,1]
             else: raise RuntimeErrort('gridtype not implmeneted')
@@ -154,7 +156,10 @@ class sieve():
         B=[]
         k=z.shape[1]
         for j in range(k): 
-            Bj=sieve.basis_j(z[:,j], deg[j], btype[j], knots[:,j])
+            if (knots is None):   
+                Bj=sieve.basis_j(z[:,j], deg[j], btype[j])
+            else:
+                Bj=sieve.basis_j(z[:,j], deg[j], btype[j], knots[:,j])
             B.append(Bj)
         return sieve.tensor(B) 
             
